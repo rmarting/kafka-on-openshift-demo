@@ -1,0 +1,19 @@
+---
+apiVersion: sources.knative.dev/v1beta1
+kind: KafkaSource
+metadata:
+  name: enterprise-event-display-kafka-source
+spec:
+  consumerGroup: inventory-event-display-knative-group
+  bootstrapServers:
+    - event-bus-kafka-bootstrap.kafka-on-ocp-demo.svc:9092
+  topics:
+    - db.enterprise.accounts
+    - db.enterprise.clients
+    - db.enterprise.movements
+    - db.enterprise.regions
+  sink:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: enterprise-event-display-serverless

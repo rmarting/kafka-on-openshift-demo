@@ -1,0 +1,16 @@
+---
+apiVersion: sources.knative.dev/v1beta1
+kind: KafkaSource
+metadata:
+  name: my-topic-event-display-kafka-source
+spec:
+  consumerGroup: event-display-knative-group
+  bootstrapServers:
+    - event-bus-kafka-bootstrap.kafka-on-ocp-demo.svc:9092
+  topics:
+    - my-topic
+  sink:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: event-display-serverless

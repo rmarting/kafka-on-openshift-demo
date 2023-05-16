@@ -1,0 +1,21 @@
+
+yamlApplicationConfig:
+  kafka:
+    clusters:
+      - name: event-bus
+        bootstrapServers: event-bus-kafka-bootstrap:9092
+        schemaRegistry: http://eda-registry-service:8080/apis/ccompat/v6
+  auth:
+    type: disabled
+  management:
+    health:
+      ldap:
+        enabled: false
+
+ingress:
+  enabled: true
+  #host: kafka-ui-kafka-on-ocp-demo.apps-crc.testing
+  host: kafka-ui.kafka-on-ocp-demo.router-default.apps.cluster-mjkxf.mjkxf.sandbox1249.opentlc.com
+
+route:
+  enabled: true

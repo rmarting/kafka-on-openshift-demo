@@ -1,0 +1,44 @@
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: mysql-enterprise-source-connector
+  labels:
+    strimzi.io/cluster: eda-kafka-connect
+spec:
+  class: io.debezium.connector.mysql.MySqlConnector
+  tasksMax: 1
+  config:
+    database.hostname: mysql-enterprise
+    database.port: 3306
+    database.user: debezium
+    database.password: dbz
+    database.server.id: 284054
+    database.server.name: db
+    database.include.list: enterprise
+    database.history.kafka.bootstrap.servers: event-bus-kafka-bootstrap:9092
+    database.history.kafka.topic: schema-changes.enterprise
+    #include.schema.changes: false    
+    #snapshot.mode: initial
+    #snapshot.new.tables: parallel
+    # To solve offset flush timeouts: The interval should be shortened and timeout increased.
+    #offset.flush.interval.ms: 30000 # Default: 60000
+    #offset.flush.timeout.ms: 15000 # Default: 5000
+    # DBZ is generating very large batches of records, reduce parameters max.batch.size and max.queue.size
+    #max.batch.size: 2048
+    #max.queue.size: 8192
+    # Service Registry Integration
+    # Key Converter Avro
+    #key.converter: io.apicurio.registry.utils.converter.AvroConverter
+    # Key Converter JSON
+    key.converter: io.apicurio.registry.utils.converter.ExtJsonConverter
+    key.converter.apicurio.registry.url: http://eda-registry-service:8080/apis/registry/v2
+    key.converter.apicurio.registry.auto-register: true
+    key.converter.apicurio.registry.find-latest: true
+    # Value Converter Avro
+    #value.converter: io.apicurio.registry.utils.converter.AvroConverter
+    # Value Converter JSON
+    value.converter: io.apicurio.registry.utils.converter.ExtJsonConverter
+    value.converter.apicurio.registry.url: http://eda-registry-service:8080/apis/registry/v2
+    value.converter.apicurio.registry.auto-register: true
+    value.converter.apicurio.registry.find-latest: true    

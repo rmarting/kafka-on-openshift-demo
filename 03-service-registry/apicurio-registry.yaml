@@ -1,0 +1,15 @@
+---
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry
+metadata:
+  name: eda-registry
+spec:
+  configuration:
+    persistence: "kafkasql"
+    kafkasql:
+      bootstrapServers: "event-bus-kafka-bootstrap:9092"
+    ui:
+      readOnly: false
+    logLevel: INFO
+  deployment:
+    replicas: 1

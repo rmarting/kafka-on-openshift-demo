@@ -1,0 +1,20 @@
+---
+apiVersion: sources.knative.dev/v1beta1
+kind: KafkaSource
+metadata:
+  name: inventory-event-display-kafka-source
+spec:
+  consumerGroup: inventory-event-display-knative-group
+  bootstrapServers:
+    - event-bus-kafka-bootstrap.kafka-on-ocp-demo.svc:9092
+  topics:
+    - db.inventory.addresses
+    - db.inventory.customers
+    - db.inventory.geom
+    - db.inventory.orders
+    - db.inventory.products
+  sink:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: inventory-event-display-serverless

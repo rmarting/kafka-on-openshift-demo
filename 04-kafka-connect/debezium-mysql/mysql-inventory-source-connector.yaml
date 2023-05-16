@@ -1,0 +1,35 @@
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: mysql-inventory-source-connector
+  labels:
+    strimzi.io/cluster: eda-kafka-connect
+spec:
+  class: io.debezium.connector.mysql.MySqlConnector
+  tasksMax: 1  
+  config:  
+    database.hostname: mysql-inventory
+    database.port: 3306
+    database.user: debezium
+    database.password: dbz
+    database.server.id: 184054  
+    database.server.name: db
+    database.include.list: inventory
+    database.history.kafka.bootstrap.servers: event-bus-kafka-bootstrap:9092
+    database.history.kafka.topic: schema-changes.inventory
+    # Service Registry Integration
+    # Key Converter Avro
+    #key.converter: io.apicurio.registry.utils.converter.AvroConverter
+    # Key Converter JSON
+    key.converter: io.apicurio.registry.utils.converter.ExtJsonConverter
+    key.converter.apicurio.registry.url: http://eda-registry-service:8080/apis/registry/v2
+    key.converter.apicurio.registry.auto-register: true
+    key.converter.apicurio.registry.find-latest: true
+    # Value Converter Avro
+    #value.converter: io.apicurio.registry.utils.converter.AvroConverter
+    # Value Converter JSON
+    value.converter: io.apicurio.registry.utils.converter.ExtJsonConverter
+    value.converter.apicurio.registry.url: http://eda-registry-service:8080/apis/registry/v2
+    value.converter.apicurio.registry.auto-register: true
+    value.converter.apicurio.registry.find-latest: true    
